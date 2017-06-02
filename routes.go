@@ -33,6 +33,12 @@ var routes = Routes{
 		"/todos/{todoId}",
 		TodoShow,
 	},
+	Route{
+		"RepoCreateTodo",
+		"POST",
+		"/todos",
+		TodoCreate,
+	},
 }
 
 func NewRouter() *mux.Router {
