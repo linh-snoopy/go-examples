@@ -1,1 +1,3 @@
 # go-examples
+
+https://thenewstack.io/make-a-restful-json-api-go/
