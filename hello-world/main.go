@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/middleware"
+	"net/http"
 )
 
 func main() {

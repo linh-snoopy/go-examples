@@ -26,7 +26,7 @@ func (c circle) area() float64 {
 }
 
 func (r rect) perim() float64 {
-	return 2*(r.height + r.width)
+	return 2 * (r.height + r.width)
 }
 
 func (c circle) perim() float64 {
@@ -76,9 +76,9 @@ func main() {
 	for _, animal := range animals {
 		fmt.Println(animal.Speak())
 	}
-	r := rect{width:3, height:4}
-	c := circle{radius:4}
-	
+	r := rect{width: 3, height: 4}
+	c := circle{radius: 4}
+
 	measure(r)
 	measure(c)
 }

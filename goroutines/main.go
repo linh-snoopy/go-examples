@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"time"
 	"sync"
+	"time"
 )
 
 // Fprint formats using the default formats for its operands and writes to w.

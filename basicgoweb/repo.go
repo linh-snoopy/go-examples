@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 import "log"
+
 var currentId int
 
 var todos Todos
@@ -23,7 +24,7 @@ func RepoFindTodo(id int) Todo {
 }
 
 func RepoCreateTodo(t Todo) Todo {
-	currentId +=1
+	currentId += 1
 	t.Id = currentId
 	todos = append(todos, t)
 	log.Println(t)

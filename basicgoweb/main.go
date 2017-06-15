@@ -1,4 +1,4 @@
-package main 
+package main
 
 import (
 	"log"
@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-    router := NewRouter()
+	router := NewRouter()
 	log.Println("Starting server at port 8080")
-    log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
