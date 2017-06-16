@@ -1,0 +1,16 @@
+development:
+    driver: postgres
+    open: user=postgres password=postgres dbname=tse_clean port=5432 sslmode=disable
+
+test:
+    driver: postgres
+    open: $MERCEDES_DB_TEST
+
+
+staging:
+    driver: postgres
+    open: $MERCEDES_DB_STAGING
+
+codeship:
+  driver: postgres
+open: user=$PG_USER password=$PG_PASSWORD dbname=test port=5432 sslmode=disable
