@@ -5,7 +5,7 @@ import (
 )
 
 type UserRepository interface {
-	Store(user User) error
+	Store(user User)
 	FindById(id int) User
 }
 

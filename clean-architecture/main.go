@@ -9,12 +9,15 @@ import (
 	"net/http"
 )
 
-var DB = "postgres://postgres:postgres@localhost/tse_clean?sslmode=disable"
+var DB = "postgres://postgres:postgres@localhost/test_clean?sslmode=disable"
 
 func main() {
-	dbHandler := infrastructures.NewPostgresHandler(DB)
+	dbHandler, err := infrastructures.NewPostgresHandler(DB)
+	if err!= nil {
+		panic(err)
+	}
 
-	handlers := make(map[string] repositories.DbHandler)
+	handlers := make(map[string]repositories.DbHandler)
 	handlers["DbUserRepo"] = dbHandler
 	handlers["DbCustomerRepo"] = dbHandler
 	handlers["DbItemRepo"] = dbHandler
@@ -25,7 +28,7 @@ func main() {
 	orderInteractor.ItemRepository = repositories.NewDbItemRepo(handlers)
 	orderInteractor.OrderRepository = repositories.NewDbOrderRepo(handlers)
 
-	webserviceHandler := interfaces.WebserviceHandler{}
+	webserviceHandler := interfaces.WebServiceHandler{}
 	webserviceHandler.OrderInteractor = orderInteractor
 
 	http.HandleFunc("/orders", func(res http.ResponseWriter, req *http.Request) {
