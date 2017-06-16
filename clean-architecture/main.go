@@ -13,7 +13,7 @@ var DB = "postgres://postgres:postgres@localhost/test_clean?sslmode=disable"
 
 func main() {
 	dbHandler, err := infrastructures.NewPostgresHandler(DB)
-	if err!= nil {
+	if err != nil {
 		panic(err)
 	}
 

@@ -55,7 +55,7 @@ func (r PostgresRow) Scan(dest ...interface{}) {
 	r.Row.Scan(dest...)
 }
 
-func NewPostgresHandler(dbFileName string) (*PostgresHandler, error){
+func NewPostgresHandler(dbFileName string) (*PostgresHandler, error) {
 	conn, err := sql.Open("postgres", dbFileName)
 	if err != nil {
 		return nil, err
