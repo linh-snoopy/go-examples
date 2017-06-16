@@ -13,7 +13,7 @@ type Order struct {
 }
 
 type OrderRepository interface {
-	Store(order Order) error
+	Store(order Order)
 	FindById(id int) Order
 }
 

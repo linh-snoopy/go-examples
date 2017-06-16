@@ -8,6 +8,6 @@ type Item struct {
 }
 
 type ItemRepository interface {
-	Store(item Item) error
+	Store(item Item)
 	FindById(id int) Item
 }

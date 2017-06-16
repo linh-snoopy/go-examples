@@ -6,6 +6,7 @@ import (
 	//	"github.com/linh-snoopy/go-examples/clean-architecture/entities"
 	"github.com/linh-snoopy/go-examples/clean-architecture/infrastructures"
 	"github.com/linh-snoopy/go-examples/clean-architecture/usecases"
+	"net/http"
 )
 
 var DB = "postgres://postgres:postgres@localhost/tse_clean?sslmode=disable"
@@ -13,16 +14,16 @@ var DB = "postgres://postgres:postgres@localhost/tse_clean?sslmode=disable"
 func main() {
 	dbHandler := infrastructures.NewPostgresHandler(DB)
 
-	handlers := make(map[string]interfaces.DBHandler)
+	handlers := make(map[string] repositories.DbHandler)
 	handlers["DbUserRepo"] = dbHandler
 	handlers["DbCustomerRepo"] = dbHandler
 	handlers["DbItemRepo"] = dbHandler
 	handlers["DbOrderRepo"] = dbHandler
 
 	orderInteractor := new(usecases.OrderInteractor)
-	orderInteractor.UserRepository = interfaces.NewDbUserRepo(handlers)
-	orderInteractor.ItemRepository = interfaces.NewDbItemRepo(handlers)
-	orderInteractor.OrderRepository = interfaces.NewDbOrderRepo(handlers)
+	orderInteractor.UserRepository = repositories.NewDbUserRepo(handlers)
+	orderInteractor.ItemRepository = repositories.NewDbItemRepo(handlers)
+	orderInteractor.OrderRepository = repositories.NewDbOrderRepo(handlers)
 
 	webserviceHandler := interfaces.WebserviceHandler{}
 	webserviceHandler.OrderInteractor = orderInteractor
