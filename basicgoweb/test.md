@@ -1,10 +1,9 @@
 # Index:
 * [Create a new template](#1create-a-template)
 * [Get detail of specific template](#2get-detail-of-template)
-* [test](#test)
 
 
-### 1. Create a template
+### Create a template
 ```javascript
 POST /api/template
 {
@@ -155,7 +154,7 @@ POST /api/template
 ```
 ---
 
-### 2. Get detail of template
+### Get detail of template
 ```javascript
 GET /api/template/{templateId}/subtemplate/{subtemplateId}
 Example: GET /api/template/vtuLbNJYUARH/subtemplate/285
@@ -260,8 +259,3 @@ Response:
     }
 }
 ```
-
-### test
-lalalala
-lalala
-lalala
