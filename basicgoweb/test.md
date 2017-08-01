@@ -152,7 +152,8 @@ POST /api/template
 	]
 }
 ```
-[on top](#index)
+[go to top](#index)
+
 ---
 
 ### Get detail of template
@@ -260,4 +261,4 @@ Response:
     }
 }
 ```
-[on top](#index)
+[go to top](#index)
