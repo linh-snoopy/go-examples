@@ -1,6 +1,6 @@
 # Index:
-* [Create a new template] (#1create-a-new-template)
-* [Get detail of specific template] (#2get-detail-of-template)
+* [Create a new template] (#markdown-header-1create-a-new-template)
+* [Get detail of specific template] (#markdown-header-2get-detail-of-template)
 
 ### 1. Create a new template
 ```javascript
