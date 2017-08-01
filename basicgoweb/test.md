@@ -1,8 +1,10 @@
 # Index:
 * [Create a new template](#create-a-template)
-* [Get detail of specific template](#get-detail-template)
+* [Get detail of specific template](#get-detail-of-template)
+* [test](#test)
 
-### 1. Create a new template
+
+### Create a template
 ```javascript
 POST /api/template
 {
@@ -152,6 +154,7 @@ POST /api/template
 }
 ```
 ---
+
 ### 2. Get detail of template
 ```javascript
 GET /api/template/{templateId}/subtemplate/{subtemplateId}
@@ -256,4 +259,8 @@ Response:
         "strip": "mercedes/passes/testing/vtuLbNJYUARH/0/M5086666_r.jpg"
     }
 }
-```
+
+### test
+lalalala
+lalala
+lalala
