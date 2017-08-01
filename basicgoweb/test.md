@@ -2,9 +2,7 @@
 * [Create a new template](#create-a-template)
 * [Get detail of specific template](#get-detail-template)
 
-<a name="create-a-template">
 ### 1. Create a new template
-</a>
 ```javascript
 POST /api/template
 {
