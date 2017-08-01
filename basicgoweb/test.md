@@ -152,9 +152,7 @@ POST /api/template
 }
 ```
 ---
-<a name="get-detail-template">
 ### 2. Get detail of template
-</a>
 ```javascript
 GET /api/template/{templateId}/subtemplate/{subtemplateId}
 Example: GET /api/template/vtuLbNJYUARH/subtemplate/285
