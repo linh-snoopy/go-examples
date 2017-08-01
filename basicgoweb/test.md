@@ -1,8 +1,10 @@
 # Index:
-* [Create a new template] (#markdown-header-1create-a-new-template)
-* [Get detail of specific template] (#markdown-header-2get-detail-of-template)
+* [Create a new template](#create-a-template)
+* [Get detail of specific template](#get-detail-template)
 
+<a name="create-a-template">
 ### 1. Create a new template
+</a>
 ```javascript
 POST /api/template
 {
@@ -152,8 +154,9 @@ POST /api/template
 }
 ```
 ---
-
+<a name="get-detail-template">
 ### 2. Get detail of template
+</a>
 ```javascript
 GET /api/template/{templateId}/subtemplate/{subtemplateId}
 Example: GET /api/template/vtuLbNJYUARH/subtemplate/285
