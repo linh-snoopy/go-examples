@@ -1,6 +1,6 @@
 # Index:
-* [Create a new template](#1create-a-template)
-* [Get detail of specific template](#2get-detail-of-template)
+* [Create a new template](#create-a-template)
+* [Get detail of specific template](#get-detail-of-template)
 
 
 ### Create a template
