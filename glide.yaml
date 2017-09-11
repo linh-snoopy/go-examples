@@ -1,0 +1,22 @@
+package: github.com/linh-snoopy/go-examples
+import:
+- package: github.com/gorilla/mux
+  version: ^1.4.0
+- package: github.com/lib/pq
+- package: github.com/mattn/go-sqlite3
+  version: ^1.2.0
+- package: github.com/pressly/chi
+  version: ^3.1.5
+  subpackages:
+  - docgen
+  - middleware
+  - render
+- package: github.com/robfig/cron
+  version: ^1.0.0
+- package: github.com/satori/go.uuid
+  version: ^1.1.0
+testImport:
+- package: github.com/stretchr/testify
+  version: ^1.1.4
+  subpackages:
+  - assert
