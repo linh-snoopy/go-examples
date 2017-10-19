@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"time"
+	"sync"
 )
 
 // NewWorker creates, and returns a new Worker object. Its only argument
@@ -28,7 +29,8 @@ type Worker struct {
 
 // This function "starts" the worker by starting a goroutine, that is
 // an infinite "for-select" loop.
-func (w *Worker) Start() {
+func (w *Worker) Start(wg *sync.WaitGroup) {
+	
 	go func() {
 		for {
 			// Add ourselves into the worker queue.
@@ -45,6 +47,7 @@ func (w *Worker) Start() {
 			case <-w.QuitChan:
 				// We have been asked to stop.
 				fmt.Printf("worker%d stopping\n", w.ID)
+				wg.Done()
 				return
 			}
 		}

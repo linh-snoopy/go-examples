@@ -1,10 +1,12 @@
 package main
 
 import "fmt"
+import "sync"
 
 var WorkerQueue chan chan WorkRequest
+var workers []Worker
 
-func StartDispatcher(nworkers int) {
+func StartDispatcher(nworkers int, wg *sync.WaitGroup) {
 	// First, initialize the channel we are going to but the workers' work channels into.
 	WorkerQueue = make(chan chan WorkRequest, nworkers)
 
@@ -12,7 +14,9 @@ func StartDispatcher(nworkers int) {
 	for i := 0; i < nworkers; i++ {
 		fmt.Println("Starting worker", i+1)
 		worker := NewWorker(i+1, WorkerQueue)
-		worker.Start()
+		worker.Start(wg)
+		wg.Add(1)
+		workers = append(workers, worker)
 	}
 
 	go func() {
@@ -29,4 +33,10 @@ func StartDispatcher(nworkers int) {
 			}
 		}
 	}()
+}
+
+func StopDispatcher() {
+	for i, _ := range workers {
+		workers[i].Stop()
+	}
 }
