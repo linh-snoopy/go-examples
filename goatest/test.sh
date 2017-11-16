@@ -15,6 +15,12 @@ do
 		mkdir -p "$f"
 	fi
 done
+error_handle() {
+	if [ $? -ne 0 ]; then
+		echo "Failed and stop bash"
+		exit 1
+	fi
+}
 # For app, client, swagger
 echo "Generate app, client and swagger"
 declare -a arr=("app" "client" "swagger")
@@ -22,11 +28,13 @@ for sub in "${arr[@]}"
 do
 	echo "----------- $sub -----------"
 	./goagen.exe "$sub" -d "$design_path" -o gen
+	error_handle
 done
 # For controller
 if [ -e "main.go" ]; then
 	echo "Regenerate controllers"
 	./goagen.exe controller -d "$design_path" -o controllers --regen
+	error_handle
 	for f in "controllers"/*
 	do
 		sed -i -e '\|"github.com/linh-snoopy/go-examples/goatest/controllers/app"|d' "$f"
@@ -34,6 +42,7 @@ if [ -e "main.go" ]; then
 else 
 	echo "Generate main and controllers"
 	./goagen.exe main -d "$design_path" -o controllers
+	error_handle
 	# copy file main.go out of controller package
 	cp controllers/main.go .
 	rm controllers/main.go
