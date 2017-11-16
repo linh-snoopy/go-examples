@@ -20,7 +20,9 @@ func (c *OperandsController) Sum(ctx *app.SumOperandsContext) error {
 	// OperandsController_Sum: start_implement
 
 	// Put your logic here
+	v := ctx.Left + ctx.Right
 
 	// OperandsController_Sum: end_implement
-	return nil
+	res := &app.MyResult{&v}
+	return ctx.OK(res)
 }

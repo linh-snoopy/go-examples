@@ -27,6 +27,10 @@ done
 if [ -e "main.go" ]; then
 	echo "Regenerate controllers"
 	./goagen.exe controller -d "$design_path" -o controllers --regen
+	for f in "controllers"/*
+	do
+		sed -i -e '\|"github.com/linh-snoopy/go-examples/goatest/controllers/app"|d' "$f"
+	done
 else 
 	echo "Generate main and controllers"
 	./goagen.exe main -d "$design_path" -o controllers
@@ -35,9 +39,9 @@ else
 	rm controllers/main.go
 	sed -i -e 's#/controllers/app#/gen/app#g' main.go
 	sed -i '9i\\t"github.com/linh-snoopy/go-examples/goatest/controllers"' main.go
+	for f in "controllers"/*
+	do
+		sed -i -e 's#/controllers/app#/gen/app#g' "$f"
+		sed -i -e 's/package main/package controllers/g' "$f"
+	done
 fi
-for f in "controllers"/*
-do
-	sed -i -e 's#/controllers/app#/gen/app#g' "$f"
-	sed -i -e 's/package main/package controllers/g' "$f"
-done

@@ -57,13 +57,19 @@ func NewSumOperandsContext(ctx context.Context, r *http.Request, service *goa.Se
 }
 
 // OK sends a HTTP response with status code 200.
-func (ctx *SumOperandsContext) OK(resp []byte) error {
+func (ctx *SumOperandsContext) OK(r *MyResult) error {
 	if ctx.ResponseData.Header().Get("Content-Type") == "" {
-		ctx.ResponseData.Header().Set("Content-Type", "text/plain")
+		ctx.ResponseData.Header().Set("Content-Type", "vnd.my.result")
 	}
-	ctx.ResponseData.WriteHeader(200)
-	_, err := ctx.ResponseData.Write(resp)
-	return err
+	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
+}
+
+// OKExtended sends a HTTP response with status code 200.
+func (ctx *SumOperandsContext) OKExtended(r *MyResultExtended) error {
+	if ctx.ResponseData.Header().Get("Content-Type") == "" {
+		ctx.ResponseData.Header().Set("Content-Type", "vnd.my.result")
+	}
+	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
 // Add222UsersContext provides the Users add222 action context.

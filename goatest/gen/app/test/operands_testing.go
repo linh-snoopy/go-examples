@@ -25,10 +25,10 @@ import (
 )
 
 // SumOperandsOK runs the method Sum of the given controller with the given parameters.
-// It returns the response writer so it's possible to inspect the response headers.
+// It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SumOperandsOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.OperandsController, left int, right int) http.ResponseWriter {
+func SumOperandsOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.OperandsController, left int, right int) (http.ResponseWriter, *app.MyResult) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -77,7 +77,81 @@ func SumOperandsOK(t goatest.TInterface, ctx context.Context, service *goa.Servi
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
+	var mt *app.MyResult
+	if resp != nil {
+		var ok bool
+		mt, ok = resp.(*app.MyResult)
+		if !ok {
+			t.Fatalf("invalid response media: got variable of type %T, value %+v, expected instance of app.MyResult", resp, resp)
+		}
+	}
 
 	// Return results
-	return rw
+	return rw, mt
+}
+
+// SumOperandsOKExtended runs the method Sum of the given controller with the given parameters.
+// It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
+// If ctx is nil then context.Background() is used.
+// If service is nil then a default service is created.
+func SumOperandsOKExtended(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.OperandsController, left int, right int) (http.ResponseWriter, *app.MyResultExtended) {
+	// Setup service
+	var (
+		logBuf bytes.Buffer
+		resp   interface{}
+
+		respSetter goatest.ResponseSetterFunc = func(r interface{}) { resp = r }
+	)
+	if service == nil {
+		service = goatest.Service(&logBuf, respSetter)
+	} else {
+		logger := log.New(&logBuf, "", log.Ltime)
+		service.WithLogger(goa.NewLogger(logger))
+		newEncoder := func(io.Writer) goa.Encoder { return respSetter }
+		service.Encoder = goa.NewHTTPEncoder() // Make sure the code ends up using this decoder
+		service.Encoder.Register(newEncoder, "*/*")
+	}
+
+	// Setup request context
+	rw := httptest.NewRecorder()
+	u := &url.URL{
+		Path: fmt.Sprintf("/results/sum/%v/%v", left, right),
+	}
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		panic("invalid test " + err.Error()) // bug
+	}
+	prms := url.Values{}
+	prms["left"] = []string{fmt.Sprintf("%v", left)}
+	prms["right"] = []string{fmt.Sprintf("%v", right)}
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	goaCtx := goa.NewContext(goa.WithAction(ctx, "OperandsTest"), rw, req, prms)
+	sumCtx, _err := app.NewSumOperandsContext(goaCtx, req, service)
+	if _err != nil {
+		panic("invalid test data " + _err.Error()) // bug
+	}
+
+	// Perform action
+	_err = ctrl.Sum(sumCtx)
+
+	// Validate response
+	if _err != nil {
+		t.Fatalf("controller returned %+v, logs:\n%s", _err, logBuf.String())
+	}
+	if rw.Code != 200 {
+		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
+	}
+	var mt *app.MyResultExtended
+	if resp != nil {
+		var ok bool
+		mt, ok = resp.(*app.MyResultExtended)
+		if !ok {
+			t.Fatalf("invalid response media: got variable of type %T, value %+v, expected instance of app.MyResultExtended", resp, resp)
+		}
+	}
+
+	// Return results
+	return rw, mt
 }

@@ -82,6 +82,6 @@ var _ = Resource("Operands", func () {
 			Param("left", Integer, "Left operand")
 			Param("right", Integer, "Right operand")
 		})
-		Response(OK)
+		Response(OK, Results)
 	})
 })

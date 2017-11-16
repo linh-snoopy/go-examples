@@ -1,6 +1,18 @@
 consumes:
 - application/json
 definitions:
+  MyResult:
+    description: The result of an operation (default view)
+    example:
+      value: 1.8875258e+18
+    properties:
+      value:
+        description: Results value
+        example: 1.8875258e+18
+        format: int64
+        type: integer
+    title: 'Mediatype identifier: vnd.my.result; view=default'
+    type: object
   MyUser:
     description: MyUser media type (default view)
     example:
@@ -77,10 +89,12 @@ paths:
         required: true
         type: integer
       produces:
-      - text/plain
+      - vnd.my.result
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/MyResult'
       schemes:
       - http
       summary: sum Operands
@@ -147,8 +161,6 @@ produces:
 responses:
   Created:
     description: Created
-  OK:
-    description: OK
 schemes:
 - http
 swagger: "2.0"
