@@ -20,10 +20,10 @@ func main() {
 	service.Use(middleware.Recover())
 
 	// Mount "Operands" controller
-	c := controllers.NewOperandsController(service)
+	c := NewOperandsController(service)
 	app.MountOperandsController(service, c)
 	// Mount "Users" controller
-	c2 := controllers.NewUsersController(service)
+	c2 := NewUsersController(service)
 	app.MountUsersController(service, c2)
 
 	// Start service

@@ -1,11 +1,11 @@
 #!/bin/bash
 # a sample for testing goagen cmd
 # Get input package design
-# read -p "Enter your design package flag: " design_path
-# if [ "$design_path" == "" ]; then
-# 	design_path="github.com/linh-snoopy/go-examples/goatest/design"
-# fi
-# echo "Running generator: $design_path"
+read -p "Enter your design package flag: " design_path
+if [ "$design_path" == "" ]; then
+	design_path="github.com/linh-snoopy/go-examples/goatest/design"
+fi
+echo "Running generator: $design_path"
 # Create gen and controller folders
 declare -a folders=("controllers" "gen")
 for f in "${folders[@]}"
@@ -21,18 +21,15 @@ declare -a arr=("app" "client" "swagger")
 for sub in "${arr[@]}"
 do
 	echo "----------- $sub -----------"
-	./goagen.exe "$sub" -d github.com/linh-snoopy/go-examples/goatest/design -o gen
+	./goagen.exe "$sub" -d "$design_path" -o gen
 done
-# ./goagen.exe app -d github.com/linh-snoopy/go-examples/goatest/design -o gen
-# ./goagen.exe client -d github.com/linh-snoopy/go-examples/goatest/design -o gen
-# ./goagen.exe swagger -d github.com/linh-snoopy/go-examples/goatest/design -o gen
 # For controller
-if [ -d "main.go" ]; then
+if [ -e "main.go" ]; then
 	echo "Regenerate controllers"
-	./goagen.exe controller -d github.com/linh-snoopy/go-examples/goatest/design -o controllers --regen
+	./goagen.exe controller -d "$design_path" -o controllers --regen
 else 
 	echo "Generate main and controllers"
-	./goagen.exe main -d github.com/linh-snoopy/go-examples/goatest/design -o controllers
+	./goagen.exe main -d "$design_path" -o controllers
 	# copy file main.go out of controller package
 	cp controllers/main.go .
 	rm controllers/main.go
