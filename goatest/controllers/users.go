@@ -3,7 +3,6 @@ package controllers
 import (
 	"github.com/goadesign/goa"
 	"github.com/linh-snoopy/go-examples/goatest/gen/app"
-	"github.com/linh-snoopy/go-examples/goatest/gen/app"
 )
 
 // UsersController implements the Users resource.
