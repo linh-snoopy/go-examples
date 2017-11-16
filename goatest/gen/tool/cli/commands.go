@@ -5,7 +5,7 @@
 // Command:
 // $ goagen
 // --design=github.com/linh-snoopy/go-examples/goatest/design
-// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest
+// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest\gen
 // --version=v1.3.0
 
 package cli
@@ -17,9 +17,10 @@ import (
 	"github.com/goadesign/goa"
 	goaclient "github.com/goadesign/goa/client"
 	uuid "github.com/goadesign/goa/uuid"
-	"github.com/linh-snoopy/go-examples/goatest/client"
+	"github.com/linh-snoopy/go-examples/goatest/gen/client"
 	"github.com/spf13/cobra"
 	"log"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -27,8 +28,17 @@ import (
 )
 
 type (
-	// AddUsersCommand is the command line data structure for the add action of Users
-	AddUsersCommand struct {
+	// SumOperandsCommand is the command line data structure for the sum action of Operands
+	SumOperandsCommand struct {
+		// Left operand
+		Left int
+		// Right operand
+		Right       int
+		PrettyPrint bool
+	}
+
+	// Add222UsersCommand is the command line data structure for the add222 action of Users
+	Add222UsersCommand struct {
 		Payload     string
 		ContentType string
 		PrettyPrint bool
@@ -36,6 +46,8 @@ type (
 
 	// DetailUsersCommand is the command line data structure for the detail action of Users
 	DetailUsersCommand struct {
+		// user id
+		ID          string
 		PrettyPrint bool
 	}
 
@@ -49,21 +61,21 @@ type (
 func RegisterCommands(app *cobra.Command, c *client.Client) {
 	var command, sub *cobra.Command
 	command = &cobra.Command{
-		Use:   "add",
+		Use:   "add222",
 		Short: `Register a new user`,
 	}
-	tmp1 := new(AddUsersCommand)
+	tmp1 := new(Add222UsersCommand)
 	sub = &cobra.Command{
-		Use:   `users ["/users/add"]`,
+		Use:   `users ["/users/add223344"]`,
 		Short: ``,
 		Long: `
 
 Payload example:
 
 {
-   "email": "Et beatae asperiores perferendis.",
-   "name": "Ut voluptates similique ratione autem soluta.",
-   "phone": "Repudiandae eos velit provident."
+   "email": "Voluptates similique ratione.",
+   "name": "Soluta repellat.",
+   "phone": "Eos velit provident excepturi."
 }`,
 		RunE: func(cmd *cobra.Command, args []string) error { return tmp1.Run(c, args) },
 	}
@@ -77,7 +89,7 @@ Payload example:
 	}
 	tmp2 := new(DetailUsersCommand)
 	sub = &cobra.Command{
-		Use:   `users ["/users/detail"]`,
+		Use:   `users ["/users/detail/ID"]`,
 		Short: ``,
 		RunE:  func(cmd *cobra.Command, args []string) error { return tmp2.Run(c, args) },
 	}
@@ -97,6 +109,20 @@ Payload example:
 	}
 	tmp3.RegisterFlags(sub, c)
 	sub.PersistentFlags().BoolVar(&tmp3.PrettyPrint, "pp", false, "Pretty print response body")
+	command.AddCommand(sub)
+	app.AddCommand(command)
+	command = &cobra.Command{
+		Use:   "sum",
+		Short: `Sum`,
+	}
+	tmp4 := new(SumOperandsCommand)
+	sub = &cobra.Command{
+		Use:   `operands ["/results/sum/LEFT/RIGHT"]`,
+		Short: ``,
+		RunE:  func(cmd *cobra.Command, args []string) error { return tmp4.Run(c, args) },
+	}
+	tmp4.RegisterFlags(sub, c)
+	sub.PersistentFlags().BoolVar(&tmp4.PrettyPrint, "pp", false, "Pretty print response body")
 	command.AddCommand(sub)
 	app.AddCommand(command)
 }
@@ -254,24 +280,17 @@ func boolArray(ins []string) ([]bool, error) {
 	return vals, nil
 }
 
-// Run makes the HTTP request corresponding to the AddUsersCommand command.
-func (cmd *AddUsersCommand) Run(c *client.Client, args []string) error {
+// Run makes the HTTP request corresponding to the SumOperandsCommand command.
+func (cmd *SumOperandsCommand) Run(c *client.Client, args []string) error {
 	var path string
 	if len(args) > 0 {
 		path = args[0]
 	} else {
-		path = "/users/add"
-	}
-	var payload client.User
-	if cmd.Payload != "" {
-		err := json.Unmarshal([]byte(cmd.Payload), &payload)
-		if err != nil {
-			return fmt.Errorf("failed to deserialize payload: %s", err)
-		}
+		path = fmt.Sprintf("/results/sum/%v/%v", cmd.Left, cmd.Right)
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	resp, err := c.AddUsers(ctx, path, &payload)
+	resp, err := c.SumOperands(ctx, path)
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -282,7 +301,42 @@ func (cmd *AddUsersCommand) Run(c *client.Client, args []string) error {
 }
 
 // RegisterFlags registers the command flags with the command line.
-func (cmd *AddUsersCommand) RegisterFlags(cc *cobra.Command, c *client.Client) {
+func (cmd *SumOperandsCommand) RegisterFlags(cc *cobra.Command, c *client.Client) {
+	var left int
+	cc.Flags().IntVar(&cmd.Left, "left", left, `Left operand`)
+	var right int
+	cc.Flags().IntVar(&cmd.Right, "right", right, `Right operand`)
+}
+
+// Run makes the HTTP request corresponding to the Add222UsersCommand command.
+func (cmd *Add222UsersCommand) Run(c *client.Client, args []string) error {
+	var path string
+	if len(args) > 0 {
+		path = args[0]
+	} else {
+		path = "/users/add223344"
+	}
+	var payload client.User
+	if cmd.Payload != "" {
+		err := json.Unmarshal([]byte(cmd.Payload), &payload)
+		if err != nil {
+			return fmt.Errorf("failed to deserialize payload: %s", err)
+		}
+	}
+	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
+	ctx := goa.WithLogger(context.Background(), logger)
+	resp, err := c.Add222Users(ctx, path, &payload)
+	if err != nil {
+		goa.LogError(ctx, "failed", "err", err)
+		return err
+	}
+
+	goaclient.HandleResponse(c.Client, resp, cmd.PrettyPrint)
+	return nil
+}
+
+// RegisterFlags registers the command flags with the command line.
+func (cmd *Add222UsersCommand) RegisterFlags(cc *cobra.Command, c *client.Client) {
 	cc.Flags().StringVar(&cmd.Payload, "payload", "", "Request body encoded in JSON")
 	cc.Flags().StringVar(&cmd.ContentType, "content", "", "Request content type override, e.g. 'application/x-www-form-urlencoded'")
 }
@@ -293,7 +347,7 @@ func (cmd *DetailUsersCommand) Run(c *client.Client, args []string) error {
 	if len(args) > 0 {
 		path = args[0]
 	} else {
-		path = "/users/detail"
+		path = fmt.Sprintf("/users/detail/%v", url.QueryEscape(cmd.ID))
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
@@ -309,6 +363,8 @@ func (cmd *DetailUsersCommand) Run(c *client.Client, args []string) error {
 
 // RegisterFlags registers the command flags with the command line.
 func (cmd *DetailUsersCommand) RegisterFlags(cc *cobra.Command, c *client.Client) {
+	var id string
+	cc.Flags().StringVar(&cmd.ID, "id", id, `user id`)
 }
 
 // Run makes the HTTP request corresponding to the ListUsersCommand command.

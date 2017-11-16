@@ -5,7 +5,7 @@
 // Command:
 // $ goagen
 // --design=github.com/linh-snoopy/go-examples/goatest/design
-// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest
+// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest\gen
 // --version=v1.3.0
 
 package app
@@ -27,10 +27,37 @@ func initService(service *goa.Service) {
 	service.Decoder.Register(goa.NewJSONDecoder, "*/*")
 }
 
+// OperandsController is the controller interface for the Operands actions.
+type OperandsController interface {
+	goa.Muxer
+	Sum(*SumOperandsContext) error
+}
+
+// MountOperandsController "mounts" a Operands resource controller on the given service.
+func MountOperandsController(service *goa.Service, ctrl OperandsController) {
+	initService(service)
+	var h goa.Handler
+
+	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
+		// Check if there was an error loading the request
+		if err := goa.ContextError(ctx); err != nil {
+			return err
+		}
+		// Build the context
+		rctx, err := NewSumOperandsContext(ctx, req, service)
+		if err != nil {
+			return err
+		}
+		return ctrl.Sum(rctx)
+	}
+	service.Mux.Handle("GET", "/results/sum/:left/:right", ctrl.MuxHandler("sum", h, nil))
+	service.LogInfo("mount", "ctrl", "Operands", "action", "Sum", "route", "GET /results/sum/:left/:right")
+}
+
 // UsersController is the controller interface for the Users actions.
 type UsersController interface {
 	goa.Muxer
-	Add(*AddUsersContext) error
+	Add222(*Add222UsersContext) error
 	Detail(*DetailUsersContext) error
 	List(*ListUsersContext) error
 }
@@ -46,7 +73,7 @@ func MountUsersController(service *goa.Service, ctrl UsersController) {
 			return err
 		}
 		// Build the context
-		rctx, err := NewAddUsersContext(ctx, req, service)
+		rctx, err := NewAdd222UsersContext(ctx, req, service)
 		if err != nil {
 			return err
 		}
@@ -56,10 +83,10 @@ func MountUsersController(service *goa.Service, ctrl UsersController) {
 		} else {
 			return goa.MissingPayloadError()
 		}
-		return ctrl.Add(rctx)
+		return ctrl.Add222(rctx)
 	}
-	service.Mux.Handle("POST", "/users/add", ctrl.MuxHandler("add", h, unmarshalAddUsersPayload))
-	service.LogInfo("mount", "ctrl", "Users", "action", "Add", "route", "POST /users/add")
+	service.Mux.Handle("POST", "/users/add223344", ctrl.MuxHandler("add222", h, unmarshalAdd222UsersPayload))
+	service.LogInfo("mount", "ctrl", "Users", "action", "Add222", "route", "POST /users/add223344")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -73,8 +100,8 @@ func MountUsersController(service *goa.Service, ctrl UsersController) {
 		}
 		return ctrl.Detail(rctx)
 	}
-	service.Mux.Handle("GET", "/users/detail", ctrl.MuxHandler("detail", h, nil))
-	service.LogInfo("mount", "ctrl", "Users", "action", "Detail", "route", "GET /users/detail")
+	service.Mux.Handle("GET", "/users/detail/:id", ctrl.MuxHandler("detail", h, nil))
+	service.LogInfo("mount", "ctrl", "Users", "action", "Detail", "route", "GET /users/detail/:id")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -92,8 +119,8 @@ func MountUsersController(service *goa.Service, ctrl UsersController) {
 	service.LogInfo("mount", "ctrl", "Users", "action", "List", "route", "GET /users/list")
 }
 
-// unmarshalAddUsersPayload unmarshals the request body into the context request data Payload field.
-func unmarshalAddUsersPayload(ctx context.Context, service *goa.Service, req *http.Request) error {
+// unmarshalAdd222UsersPayload unmarshals the request body into the context request data Payload field.
+func unmarshalAdd222UsersPayload(ctx context.Context, service *goa.Service, req *http.Request) error {
 	payload := &user{}
 	if err := service.DecodeRequest(req, payload); err != nil {
 		return err

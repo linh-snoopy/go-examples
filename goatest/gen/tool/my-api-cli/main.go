@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	goaclient "github.com/goadesign/goa/client"
-	"github.com/linh-snoopy/go-examples/goatest/client"
-	"github.com/linh-snoopy/go-examples/goatest/tool/cli"
+	"github.com/linh-snoopy/go-examples/goatest/gen/client"
+	"github.com/linh-snoopy/go-examples/goatest/gen/tool/cli"
 	"github.com/spf13/cobra"
 	"net/http"
 	"os"

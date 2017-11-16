@@ -1,8 +1,8 @@
-package main
+package controllers
 
 import (
 	"github.com/goadesign/goa"
-	"github.com/linh-snoopy/go-examples/goatest/app"
+	"github.com/linh-snoopy/go-examples/goatest/gen/app"
 )
 
 // UsersController implements the Users resource.
@@ -15,13 +15,13 @@ func NewUsersController(service *goa.Service) *UsersController {
 	return &UsersController{Controller: service.NewController("UsersController")}
 }
 
-// Add runs the add action.
-func (c *UsersController) Add(ctx *app.AddUsersContext) error {
-	// UsersController_Add: start_implement
+// Add222 runs the add222 action.
+func (c *UsersController) Add222(ctx *app.Add222UsersContext) error {
+	// UsersController_Add222: start_implement
 
 	// Put your logic here
 
-	// UsersController_Add: end_implement
+	// UsersController_Add222: end_implement
 	return nil
 }
 

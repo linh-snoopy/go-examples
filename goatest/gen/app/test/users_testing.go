@@ -5,7 +5,7 @@
 // Command:
 // $ goagen
 // --design=github.com/linh-snoopy/go-examples/goatest/design
-// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest
+// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest\gen
 // --version=v1.3.0
 
 package test
@@ -16,7 +16,7 @@ import (
 	"fmt"
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/goatest"
-	"github.com/linh-snoopy/go-examples/goatest/app"
+	"github.com/linh-snoopy/go-examples/goatest/gen/app"
 	"io"
 	"log"
 	"net/http"
@@ -24,11 +24,11 @@ import (
 	"net/url"
 )
 
-// AddUsersCreated runs the method Add of the given controller with the given parameters and payload.
+// Add222UsersCreated runs the method Add222 of the given controller with the given parameters and payload.
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func AddUsersCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UsersController, payload *app.User) http.ResponseWriter {
+func Add222UsersCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UsersController, payload *app.User) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -60,7 +60,7 @@ func AddUsersCreated(t goatest.TInterface, ctx context.Context, service *goa.Ser
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/users/add"),
+		Path: fmt.Sprintf("/users/add223344"),
 	}
 	req, _err := http.NewRequest("POST", u.String(), nil)
 	if _err != nil {
@@ -71,14 +71,14 @@ func AddUsersCreated(t goatest.TInterface, ctx context.Context, service *goa.Ser
 		ctx = context.Background()
 	}
 	goaCtx := goa.NewContext(goa.WithAction(ctx, "UsersTest"), rw, req, prms)
-	addCtx, __err := app.NewAddUsersContext(goaCtx, req, service)
+	add222Ctx, __err := app.NewAdd222UsersContext(goaCtx, req, service)
 	if __err != nil {
 		panic("invalid test data " + __err.Error()) // bug
 	}
-	addCtx.Payload = payload
+	add222Ctx.Payload = payload
 
 	// Perform action
-	__err = ctrl.Add(addCtx)
+	__err = ctrl.Add222(add222Ctx)
 
 	// Validate response
 	if __err != nil {
@@ -96,7 +96,7 @@ func AddUsersCreated(t goatest.TInterface, ctx context.Context, service *goa.Ser
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func DetailUsersOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UsersController) (http.ResponseWriter, *app.MyUser) {
+func DetailUsersOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UsersController, id string) (http.ResponseWriter, *app.MyUser) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -117,13 +117,14 @@ func DetailUsersOK(t goatest.TInterface, ctx context.Context, service *goa.Servi
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/users/detail"),
+		Path: fmt.Sprintf("/users/detail/%v", id),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	prms["id"] = []string{fmt.Sprintf("%v", id)}
 	if ctx == nil {
 		ctx = context.Background()
 	}

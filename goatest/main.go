@@ -5,7 +5,8 @@ package main
 import (
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/middleware"
-	"github.com/linh-snoopy/go-examples/goatest/app"
+	"github.com/linh-snoopy/go-examples/goatest/gen/app"
+	"github.com/linh-snoopy/go-examples/goatest/controllers"
 )
 
 func main() {
@@ -19,10 +20,10 @@ func main() {
 	service.Use(middleware.Recover())
 
 	// Mount "Operands" controller
-	c := NewOperandsController(service)
+	c := controllers.NewOperandsController(service)
 	app.MountOperandsController(service, c)
 	// Mount "Users" controller
-	c2 := NewUsersController(service)
+	c2 := controllers.NewUsersController(service)
 	app.MountUsersController(service, c2)
 
 	// Start service

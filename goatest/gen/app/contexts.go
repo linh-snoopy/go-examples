@@ -5,7 +5,7 @@
 // Command:
 // $ goagen
 // --design=github.com/linh-snoopy/go-examples/goatest/design
-// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest
+// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest\gen
 // --version=v1.3.0
 
 package app
@@ -14,30 +14,80 @@ import (
 	"context"
 	"github.com/goadesign/goa"
 	"net/http"
+	"strconv"
 )
 
-// AddUsersContext provides the Users add action context.
-type AddUsersContext struct {
+// SumOperandsContext provides the Operands sum action context.
+type SumOperandsContext struct {
+	context.Context
+	*goa.ResponseData
+	*goa.RequestData
+	Left  int
+	Right int
+}
+
+// NewSumOperandsContext parses the incoming request URL and body, performs validations and creates the
+// context used by the Operands controller sum action.
+func NewSumOperandsContext(ctx context.Context, r *http.Request, service *goa.Service) (*SumOperandsContext, error) {
+	var err error
+	resp := goa.ContextResponse(ctx)
+	resp.Service = service
+	req := goa.ContextRequest(ctx)
+	req.Request = r
+	rctx := SumOperandsContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramLeft := req.Params["left"]
+	if len(paramLeft) > 0 {
+		rawLeft := paramLeft[0]
+		if left, err2 := strconv.Atoi(rawLeft); err2 == nil {
+			rctx.Left = left
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("left", rawLeft, "integer"))
+		}
+	}
+	paramRight := req.Params["right"]
+	if len(paramRight) > 0 {
+		rawRight := paramRight[0]
+		if right, err2 := strconv.Atoi(rawRight); err2 == nil {
+			rctx.Right = right
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("right", rawRight, "integer"))
+		}
+	}
+	return &rctx, err
+}
+
+// OK sends a HTTP response with status code 200.
+func (ctx *SumOperandsContext) OK(resp []byte) error {
+	if ctx.ResponseData.Header().Get("Content-Type") == "" {
+		ctx.ResponseData.Header().Set("Content-Type", "text/plain")
+	}
+	ctx.ResponseData.WriteHeader(200)
+	_, err := ctx.ResponseData.Write(resp)
+	return err
+}
+
+// Add222UsersContext provides the Users add222 action context.
+type Add222UsersContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
 	Payload *User
 }
 
-// NewAddUsersContext parses the incoming request URL and body, performs validations and creates the
-// context used by the Users controller add action.
-func NewAddUsersContext(ctx context.Context, r *http.Request, service *goa.Service) (*AddUsersContext, error) {
+// NewAdd222UsersContext parses the incoming request URL and body, performs validations and creates the
+// context used by the Users controller add222 action.
+func NewAdd222UsersContext(ctx context.Context, r *http.Request, service *goa.Service) (*Add222UsersContext, error) {
 	var err error
 	resp := goa.ContextResponse(ctx)
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	req.Request = r
-	rctx := AddUsersContext{Context: ctx, ResponseData: resp, RequestData: req}
+	rctx := Add222UsersContext{Context: ctx, ResponseData: resp, RequestData: req}
 	return &rctx, err
 }
 
 // Created sends a HTTP response with status code 201.
-func (ctx *AddUsersContext) Created() error {
+func (ctx *Add222UsersContext) Created() error {
 	ctx.ResponseData.WriteHeader(201)
 	return nil
 }
@@ -47,6 +97,7 @@ type DetailUsersContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	ID string
 }
 
 // NewDetailUsersContext parses the incoming request URL and body, performs validations and creates the
@@ -58,6 +109,11 @@ func NewDetailUsersContext(ctx context.Context, r *http.Request, service *goa.Se
 	req := goa.ContextRequest(ctx)
 	req.Request = r
 	rctx := DetailUsersContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramID := req.Params["id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		rctx.ID = rawID
+	}
 	return &rctx, err
 }
 

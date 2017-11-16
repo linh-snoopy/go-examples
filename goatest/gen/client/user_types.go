@@ -5,10 +5,10 @@
 // Command:
 // $ goagen
 // --design=github.com/linh-snoopy/go-examples/goatest/design
-// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest
+// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest\gen
 // --version=v1.3.0
 
-package app
+package client
 
 import (
 	"github.com/goadesign/goa"

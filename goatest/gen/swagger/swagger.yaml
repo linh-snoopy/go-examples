@@ -4,21 +4,21 @@ definitions:
   MyUser:
     description: MyUser media type (default view)
     example:
-      email: Repellendus quas in id.
-      name: Expedita et aliquam.
-      phone: Ut quod id rerum aperiam est.
+      email: Quas in id asperiores expedita.
+      name: Aliquam recusandae ut quod id rerum.
+      phone: Est corrupti molestiae et beatae asperiores perferendis.
     properties:
       email:
         description: User's email address
-        example: Repellendus quas in id.
+        example: Quas in id asperiores expedita.
         type: string
       name:
         description: User's name
-        example: Expedita et aliquam.
+        example: Aliquam recusandae ut quod id rerum.
         type: string
       phone:
         description: Phone's number
-        example: Ut quod id rerum aperiam est.
+        example: Est corrupti molestiae et beatae asperiores perferendis.
         type: string
     title: 'Mediatype identifier: vnd.my.user; view=default'
     type: object
@@ -26,30 +26,30 @@ definitions:
     description: MyUserCollection is the media type for an array of MyUser (default
       view)
     example:
-    - email: Repellendus quas in id.
-      name: Expedita et aliquam.
-      phone: Ut quod id rerum aperiam est.
+    - email: Quas in id asperiores expedita.
+      name: Aliquam recusandae ut quod id rerum.
+      phone: Est corrupti molestiae et beatae asperiores perferendis.
     items:
       $ref: '#/definitions/MyUser'
     title: 'Mediatype identifier: vnd.my.user; type=collection; view=default'
     type: array
   user:
     example:
-      email: Et beatae asperiores perferendis.
-      name: Ut voluptates similique ratione autem soluta.
-      phone: Repudiandae eos velit provident.
+      email: Voluptates similique ratione.
+      name: Soluta repellat.
+      phone: Eos velit provident excepturi.
     properties:
       email:
         description: User's email address
-        example: Et beatae asperiores perferendis.
+        example: Voluptates similique ratione.
         type: string
       name:
         description: User's name
-        example: Ut voluptates similique ratione autem soluta.
+        example: Soluta repellat.
         type: string
       phone:
         description: Phone's number
-        example: Repudiandae eos velit provident.
+        example: Eos velit provident excepturi.
         type: string
     required:
     - email
@@ -61,10 +61,35 @@ info:
   title: Users Management
   version: ""
 paths:
-  /users/add:
+  /results/sum/{left}/{right}:
+    get:
+      description: Sum
+      operationId: Operands#sum
+      parameters:
+      - description: Left operand
+        in: path
+        name: left
+        required: true
+        type: integer
+      - description: Right operand
+        in: path
+        name: right
+        required: true
+        type: integer
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+      schemes:
+      - http
+      summary: sum Operands
+      tags:
+      - Operands
+  /users/add223344:
     post:
       description: Register a new user
-      operationId: Users#add
+      operationId: Users#add222
       parameters:
       - in: body
         name: payload
@@ -76,13 +101,19 @@ paths:
           description: Created
       schemes:
       - http
-      summary: add Users
+      summary: add222 Users
       tags:
       - Users
-  /users/detail:
+  /users/detail/{id}:
     get:
       description: Get detail of user
       operationId: Users#detail
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - vnd.my.user
       responses:
@@ -116,6 +147,8 @@ produces:
 responses:
   Created:
     description: Created
+  OK:
+    description: OK
 schemes:
 - http
 swagger: "2.0"

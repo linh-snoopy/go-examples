@@ -35,24 +35,24 @@ var UserMedia = MediaType("vnd.my.user", func() {
 	})
 })
 
-// var Results = MediaType("vnd.my.result", func () {
-// 	Description("The result of an operation")
-// 	Attributes(func() {
-// 		Attribute("value", Integer, "Results value")
-// 	})
-// 	View("extended", func() {
-// 		Attribute("value")
-// 	})
-// 	View("default", func() {
-// 		Attribute("value")
-// 	})
-// })
+var Results = MediaType("vnd.my.result", func () {
+	Description("The result of an operation")
+	Attributes(func() {
+		Attribute("value", Integer, "Results value")
+	})
+	View("extended", func() {
+		Attribute("value")
+	})
+	View("default", func() {
+		Attribute("value")
+	})
+})
 
 var _ = Resource("Users", func() {
 	BasePath("/users")
-	Action("add", func() {
+	Action("add222", func() {
 		Description("Register a new user")
-		Routing(POST("/add"))
+		Routing(POST("/add223344"))
 		Payload(User)
 		Response(Created)
 	})
@@ -65,20 +65,23 @@ var _ = Resource("Users", func() {
 	
 	Action("detail", func() {
 		Description("Get detail of user")
-		Routing(GET("/detail"))
+		Routing(GET("/detail/:id"))
+		Params(func() {
+			Param("id", String, "user id")
+		})
 		Response(OK, UserMedia)
 	})
 })
 
-// var _ = Resource("Operands", func () {
-// 	BasePath("/results")
-// 	Action("sum", func () {
-// 		Description("Sum")
-// 		Routing(GET("/sum/:left/:right"))
-// 		Params(func() {
-// 			Param("left", Integer, "Left operand")
-// 			Param("right", Integer, "Right operand")
-// 		})
-// 		Response(OK)
-// 	})
-// })
+var _ = Resource("Operands", func () {
+	BasePath("/results")
+	Action("sum", func () {
+		Description("Sum")
+		Routing(GET("/sum/:left/:right"))
+		Params(func() {
+			Param("left", Integer, "Left operand")
+			Param("right", Integer, "Right operand")
+		})
+		Response(OK)
+	})
+})

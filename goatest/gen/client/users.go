@@ -5,7 +5,7 @@
 // Command:
 // $ goagen
 // --design=github.com/linh-snoopy/go-examples/goatest/design
-// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest
+// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest\gen
 // --version=v1.3.0
 
 package client
@@ -18,23 +18,23 @@ import (
 	"net/url"
 )
 
-// AddUsersPath computes a request path to the add action of Users.
-func AddUsersPath() string {
+// Add222UsersPath computes a request path to the add222 action of Users.
+func Add222UsersPath() string {
 
-	return fmt.Sprintf("/users/add")
+	return fmt.Sprintf("/users/add223344")
 }
 
 // Register a new user
-func (c *Client) AddUsers(ctx context.Context, path string, payload *User) (*http.Response, error) {
-	req, err := c.NewAddUsersRequest(ctx, path, payload)
+func (c *Client) Add222Users(ctx context.Context, path string, payload *User) (*http.Response, error) {
+	req, err := c.NewAdd222UsersRequest(ctx, path, payload)
 	if err != nil {
 		return nil, err
 	}
 	return c.Client.Do(ctx, req)
 }
 
-// NewAddUsersRequest create the request corresponding to the add action endpoint of the Users resource.
-func (c *Client) NewAddUsersRequest(ctx context.Context, path string, payload *User) (*http.Request, error) {
+// NewAdd222UsersRequest create the request corresponding to the add222 action endpoint of the Users resource.
+func (c *Client) NewAdd222UsersRequest(ctx context.Context, path string, payload *User) (*http.Request, error) {
 	var body bytes.Buffer
 	err := c.Encoder.Encode(payload, &body, "*/*")
 	if err != nil {
@@ -55,9 +55,10 @@ func (c *Client) NewAddUsersRequest(ctx context.Context, path string, payload *U
 }
 
 // DetailUsersPath computes a request path to the detail action of Users.
-func DetailUsersPath() string {
+func DetailUsersPath(id string) string {
+	param0 := id
 
-	return fmt.Sprintf("/users/detail")
+	return fmt.Sprintf("/users/detail/%s", param0)
 }
 
 // Get detail of user

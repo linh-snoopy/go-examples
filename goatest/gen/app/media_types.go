@@ -5,14 +5,26 @@
 // Command:
 // $ goagen
 // --design=github.com/linh-snoopy/go-examples/goatest/design
-// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest
+// --out=c:\Users\LENOVO\go\src\github.com\linh-snoopy\go-examples\goatest\gen
 // --version=v1.3.0
 
-package client
+package app
 
-import (
-	"net/http"
-)
+// The result of an operation (default view)
+//
+// Identifier: vnd.my.result; view=default
+type MyResult struct {
+	// Results value
+	Value *int `form:"value,omitempty" json:"value,omitempty" xml:"value,omitempty"`
+}
+
+// The result of an operation (extended view)
+//
+// Identifier: vnd.my.result; view=extended
+type MyResultExtended struct {
+	// Results value
+	Value *int `form:"value,omitempty" json:"value,omitempty" xml:"value,omitempty"`
+}
 
 // MyUser media type (default view)
 //
@@ -26,21 +38,7 @@ type MyUser struct {
 	Phone *string `form:"phone,omitempty" json:"phone,omitempty" xml:"phone,omitempty"`
 }
 
-// DecodeMyUser decodes the MyUser instance encoded in resp body.
-func (c *Client) DecodeMyUser(resp *http.Response) (*MyUser, error) {
-	var decoded MyUser
-	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
-	return &decoded, err
-}
-
 // MyUserCollection is the media type for an array of MyUser (default view)
 //
 // Identifier: vnd.my.user; type=collection; view=default
 type MyUserCollection []*MyUser
-
-// DecodeMyUserCollection decodes the MyUserCollection instance encoded in resp body.
-func (c *Client) DecodeMyUserCollection(resp *http.Response) (MyUserCollection, error) {
-	var decoded MyUserCollection
-	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
-	return decoded, err
-}
