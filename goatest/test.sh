@@ -21,19 +21,38 @@ error_handle() {
 		exit 1
 	fi
 }
+# Detect ostype
+os_detector() {
+	if [[ "$OSTYPE" == "linux-gnu" ]]; then
+		cmd="goagen"
+	elif [[ "$OSTYPE" == "cygwin" ]]; then
+		# POSIX compatibility layer and Linux environment emulation for Windows
+		cmd="./goagen.exe"
+	elif [[ "$OSTYPE" == "msys" ]]; then
+		# Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
+		cmd="./goagen.exe"
+	elif [[ "$OSTYPE" == "darwin"* ]]; then
+		# MAC OSX
+		cmd="goagen"
+	else
+		cmd="goagen"
+	fi
+}
 # For app, client, swagger
+os_detector
+echo $cmd
 echo "Generate app, client and swagger"
-declare -a arr=("app" "client" "swagger")
+declare -a arr=("app" "client" "swagger" "js")
 for sub in "${arr[@]}"
 do
 	echo "----------- $sub -----------"
-	./goagen.exe "$sub" -d "$design_path" -o gen
+	"$cmd" "$sub" -d "$design_path" -o gen
 	error_handle
 done
 # For controller
 if [ -e "main.go" ]; then
 	echo "Regenerate controllers"
-	./goagen.exe controller -d "$design_path" -o controllers --regen
+	"$cmd" controller -d "$design_path" -o controllers --regen
 	error_handle
 	for f in "controllers"/*
 	do
@@ -41,11 +60,10 @@ if [ -e "main.go" ]; then
 	done
 else 
 	echo "Generate main and controllers"
-	./goagen.exe main -d "$design_path" -o controllers
+	"$cmd" main -d "$design_path" -o controllers
 	error_handle
 	# copy file main.go out of controller package
-	cp controllers/main.go .
-	rm controllers/main.go
+	mv controllers/main.go .
 	sed -i -e 's#/controllers/app#/gen/app#g' main.go
 	sed -i '9i\\t"github.com/linh-snoopy/go-examples/goatest/controllers"' main.go
 	for f in "controllers"/*

@@ -39,3 +39,4 @@ frontend/public
 debug
 launch.json
 */.DS_Store
+goatest/gen

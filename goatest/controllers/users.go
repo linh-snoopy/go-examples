@@ -30,6 +30,7 @@ func (c *UsersController) Detail(ctx *app.DetailUsersContext) error {
 	// UsersController_Detail: start_implement
 
 	// Put your logic here
+	// log.Println(ctx.ID)
 
 	// UsersController_Detail: end_implement
 	res := &app.MyUser{}
