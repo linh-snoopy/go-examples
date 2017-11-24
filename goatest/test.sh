@@ -1,11 +1,14 @@
 #!/bin/bash
 # a sample for testing goagen cmd
 # Get input package design
-read -p "Enter your design package flag: " design_path
-if [ "$design_path" == "" ]; then
-	design_path="github.com/linh-snoopy/go-examples/goatest/design"
-fi
-echo "Running generator: $design_path"
+# read -p "Enter your design package flag: " design_path
+# if [ "$design_path" == "" ]; then
+# 	design_path="github.com/linh-snoopy/go-examples/goatest/design"
+# fi
+# echo "Running generator: $design_path"
+repository="github.com/linh-snoopy/go-examples/goatest/"
+design_path="${repository}design"
+echo $design_path
 # Create gen and controller folders
 declare -a folders=("controllers" "gen")
 for f in "${folders[@]}"
@@ -57,6 +60,11 @@ if [ -e "main.go" ]; then
 	for f in "controllers"/*
 	do
 		sed -i -e '\|"github.com/linh-snoopy/go-examples/goatest/controllers/app"|d' "$f"
+		if ! grep -q "github.com/linh-snoopy/go-examples/goatest/gen/app" "$f"; then
+			line="9i"
+			echo 111111111111111
+			sed -i -e '#${line}\\t"github.com/linh-snoopy/go-examples/goatest/gen/app"' "$f"
+		fi
 	done
 else 
 	echo "Generate main and controllers"
@@ -65,7 +73,7 @@ else
 	# copy file main.go out of controller package
 	mv controllers/main.go .
 	sed -i -e 's#/controllers/app#/gen/app#g' main.go
-	sed -i '9i\\t"github.com/linh-snoopy/go-examples/goatest/controllers"' main.go
+	sed -i '9i\\t"${repository}controllers"' main.go
 	for f in "controllers"/*
 	do
 		sed -i -e 's#/controllers/app#/gen/app#g' "$f"

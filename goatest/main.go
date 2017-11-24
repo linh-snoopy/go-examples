@@ -3,10 +3,11 @@
 package main
 
 import (
+	"fmt"
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/middleware"
-	"github.com/linh-snoopy/go-examples/goatest/gen/app"
 	"github.com/linh-snoopy/go-examples/goatest/controllers"
+	"github.com/linh-snoopy/go-examples/goatest/gen/app"
 )
 
 func main() {
@@ -30,5 +31,4 @@ func main() {
 	if err := service.ListenAndServe(":8080"); err != nil {
 		service.LogError("startup", "err", err)
 	}
-
 }

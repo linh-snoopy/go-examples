@@ -15,6 +15,17 @@ func NewOperandsController(service *goa.Service) *OperandsController {
 	return &OperandsController{Controller: service.NewController("OperandsController")}
 }
 
+// Multiple runs the multiple action.
+func (c *OperandsController) Multiple(ctx *app.MultipleOperandsContext) error {
+	// OperandsController_Multiple: start_implement
+
+	// Put your logic here
+
+	// OperandsController_Multiple: end_implement
+	res := &app.MyResult{}
+	return ctx.OK(res)
+}
+
 // Sum runs the sum action.
 func (c *OperandsController) Sum(ctx *app.SumOperandsContext) error {
 	// OperandsController_Sum: start_implement
